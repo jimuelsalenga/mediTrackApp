@@ -81,8 +81,6 @@ export default function UploadRecordsScreen() {
             >
               <Picker.Item label="X-Ray" value="X-Ray" />
               <Picker.Item label="Physical Exam" value="Physical Exam" />
-              <Picker.Item label="Vaccination Card" value="Vaccination" />
-              <Picker.Item label="Lab Result" value="Lab Result" />
             </Picker>
           </View>
         </View>

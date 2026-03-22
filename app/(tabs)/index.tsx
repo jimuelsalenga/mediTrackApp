@@ -62,7 +62,7 @@ export default function LoginScreen() {
               <View style={styles.pickerWrapper}>
                 <Picker
                   selectedValue={selectedProgram}
-                  onValueChange={(itemValue) => setSelectedProgram(itemValue)}
+                  onValueChange={(itemValue: string | number) => setSelectedProgram(itemValue as string)}
                   style={styles.picker}
                   dropdownIconColor="#3366FF"
                 >
