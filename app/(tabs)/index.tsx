@@ -75,7 +75,7 @@ export default function LoginScreen() {
             </View>
 
             <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Email Address</Text>
+              <Text style={styles.inputLabel}>Institutional Email</Text>
               <TextInput 
                 value={email} 
                 onChangeText={setEmail} 
