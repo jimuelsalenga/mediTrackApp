@@ -1,207 +1,177 @@
+import { Picker } from '@react-native-picker/picker'; // Run: npx expo install @react-native-picker/picker
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Image, KeyboardAvoidingView, Platform, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function StudentLoginScreen() {
+export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [selectedProgram, setSelectedProgram] = useState('');
 
-  // The helper credentials shown in the new UI
-  const handleHelperFill = () => {
-    setEmail('student@neu.edu.ph');
-    setPassword('student123');
+  // Your list of NEU Undergraduate Programs
+  const programs = [
+    "Bachelor of Elementary Education", "Bachelor of Secondary Education",
+    "BS in Accountancy", "BS in Accounting Information System",
+    "BS in Accounting Technology", "BS in Business Administration",
+    "BS in Entrepreneurship", "BS in Real Estate Management",
+    "BS in Computer Science", "BS in Entertainment and Multimedia Computing",
+    "BS in Information Systems", "BS in Information Technology",
+    "BS in Medical Technology", "BS in Nursing", "BS in Physical Therapy",
+    "BS in Respiratory Therapy", "BS in Civil Engineering",
+    "BS in Electrical Engineering", "BS in Electronics Engineering",
+    "BS in Industrial Engineering", "BS in Mechanical Engineering",
+    "Bachelor of Music", "Bachelor of Music Major in Music Education",
+    "BS in Astronomy", "BS in Biology", "BS in Criminology",
+    "BS in Foreign Service", "BS in Psychology",
+    "Bachelor of Library and Information Science",
+    "Bachelor of Public Administration", "BS in Architecture"
+  ];
+
+  const handleSignIn = () => {
+    if (!selectedProgram) {
+      Alert.alert("Selection Required", "Please select your undergraduate program first.");
+      return;
+    }
+    // Logic for successful sign-in
+    router.replace('/(tabs)');
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView 
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardContainer}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+        style={{ flex: 1 }}
       >
-        {/* Main Card Container with Shadow and Blue Top-Border */}
-        <View style={styles.loginCard}>
-          
-          {/* Logo, Title, and Description Section */}
-          <View style={styles.headerSection}>
-            <Image 
-              source={require('../../assets/neu-logo.png')} // MAKE SURE THIS FILE EXISTS
-              style={styles.logo} 
-              resizeMode="contain" 
-            />
-            <Text style={styles.titleText}>MediTrack</Text>
-            <Text style={styles.descriptionText}>
-              New Era University Student Medical Record System
+        <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+          <View style={styles.loginCard}>
+            
+            <View style={styles.headerSection}>
+              <Image 
+                source={require('../assets/neu-logo.png')} 
+                style={styles.logo} 
+                resizeMode="contain" 
+              />
+              <Text style={styles.titleText}>MediTrack</Text>
+              <Text style={styles.descriptionText}>New Era University Student Medical Record System</Text>
+            </View>
+
+            {/* Program Selection - Crucial for Admin Filtering */}
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Undergraduate Program</Text>
+              <View style={styles.pickerWrapper}>
+                <Picker
+                  selectedValue={selectedProgram}
+                  onValueChange={(itemValue) => setSelectedProgram(itemValue)}
+                  style={styles.picker}
+                  dropdownIconColor="#3366FF"
+                >
+                  <Picker.Item label="Select your program..." value="" color="#999" />
+                  {programs.map((prog, index) => (
+                    <Picker.Item key={index} label={prog} value={prog} />
+                  ))}
+                </Picker>
+              </View>
+            </View>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Email Address</Text>
+              <TextInput 
+                value={email} 
+                onChangeText={setEmail} 
+                placeholder="student@neu.edu.ph" 
+                style={styles.textInput} 
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+            </View>
+
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Password</Text>
+              <TextInput 
+                value={password} 
+                onChangeText={setPassword} 
+                placeholder="••••••••" 
+                style={styles.textInput} 
+                secureTextEntry 
+              />
+            </View>
+
+            <TouchableOpacity 
+              style={[styles.signInButton, !selectedProgram && styles.buttonDisabled]} 
+              onPress={handleSignIn}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.signInButtonText}>Sign In</Text>
+            </TouchableOpacity>
+
+            <Text style={styles.footerNote}>
+              Note: Your program helps medical staff verify specific requirements.
             </Text>
+
           </View>
-
-          {/* Email Input Field with Outer Label */}
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Email Address</Text>
-            <TextInput
-              value={email}
-              onChangeText={setEmail}
-              placeholder="student@neu.edu.ph"
-              placeholderTextColor="#999"
-              style={styles.textInput}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
-          </View>
-
-          {/* Password Input Field with Outer Label */}
-          <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Password</Text>
-            <TextInput
-              value={password}
-              onChangeText={setPassword}
-              placeholder="••••••••"
-              placeholderTextColor="#999"
-              style={styles.textInput}
-              secureTextEntry={true} // Hides the password
-            />
-          </View>
-
-          {/* Elevated Blue Sign In Button */}
-          <TouchableOpacity 
-            style={styles.signInButton} 
-            onPress={() => router.replace('/(tabs)')} // Navigates to the main tab screen
-            activeOpacity={0.8}
-          >
-            <Text style={styles.signInButtonText}>Sign In</Text>
-          </TouchableOpacity>
-
-          {/* Admin Redirect Link (Moved and styled like the new UI) */}
-          <TouchableOpacity onPress={handleHelperFill} style={styles.helperTextLink}>
-            <Text style={styles.helperText}>Use: student@neu.edu.ph / student123</Text>
-          </TouchableOpacity>
-          
-          {/* The original 'Admin?' link from the first image - can be kept small at bottom */}
-          <TouchableOpacity onPress={() => router.push('/admin-login')} style={styles.adminLinkContainer}>
-              <Text style={styles.adminLinkText}>Are you an Admin? Login here</Text>
-          </TouchableOpacity>
-
-        </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff', // Pure white background
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  keyboardContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    padding: 20,
-  },
-  // The central elevated login card
+  container: { flex: 1, backgroundColor: '#F8F9FB' },
+  scrollContent: { flexGrow: 1, justifyContent: 'center', padding: 20 },
   loginCard: {
     backgroundColor: '#fff',
-    width: '100%',
-    maxWidth: 400, // Keeps it from stretching on tablets
-    padding: 25,
-    borderRadius: 15,
-    borderTopWidth: 4, 
-    borderTopColor: '#3366FF', // The blue top accent
-    // Android Shadow (elevation)
-    elevation: 8,
-    // iOS Shadow
+    padding: 24,
+    borderRadius: 20,
+    borderTopWidth: 5,
+    borderTopColor: '#3366FF',
+    elevation: 10,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
-    shadowRadius: 10,
+    shadowRadius: 15,
   },
-  // Logo and Text Header styles
-  headerSection: {
-    alignItems: 'center',
-    marginBottom: 20,
+  headerSection: { alignItems: 'center', marginBottom: 25 },
+  logo: { width: 90, height: 90, marginBottom: 12 },
+  titleText: { fontSize: 28, fontWeight: 'bold', color: '#1A1A1A' },
+  descriptionText: { fontSize: 13, color: '#777', textAlign: 'center', marginTop: 4 },
+  inputGroup: { marginBottom: 18 },
+  inputLabel: { fontSize: 14, fontWeight: '700', color: '#444', marginBottom: 8 },
+  pickerWrapper: {
+    backgroundColor: '#F3F4F9',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#E2E4E9',
+    overflow: 'hidden',
   },
-  logo: {
-    width: 100,
-    height: 100,
-    marginBottom: 10,
-  },
-  titleText: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    color: '#111',
-    marginBottom: 5,
-  },
-  descriptionText: {
-    fontSize: 14,
-    color: '#888',
-    textAlign: 'center',
-    paddingHorizontal: 20,
-    lineHeight: 18,
-  },
-  // General Input Field group styles
-  inputGroup: {
-    marginBottom: 15,
-    width: '100%',
-  },
-  inputLabel: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 8,
-    marginLeft: 4, // Slight indent for the label
-  },
+  picker: { height: 50, width: '100%' },
   textInput: {
-    backgroundColor: '#F7F8FC', // Very light gray fill
+    backgroundColor: '#F3F4F9',
     height: 50,
     borderRadius: 10,
     paddingHorizontal: 15,
-    fontSize: 16,
-    color: '#333',
+    fontSize: 15,
     borderWidth: 1,
-    borderColor: '#E8E8E8', // Light border
+    borderColor: '#E2E4E9',
   },
-  // The main elevated button styles
   signInButton: {
-    backgroundColor: '#3366FF', // Vivid Blue
-    height: 50,
-    borderRadius: 10,
+    backgroundColor: '#3366FF',
+    height: 55,
+    borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
-    // Button Shadow
     shadowColor: '#3366FF',
-    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 4,
+    shadowRadius: 8,
+    elevation: 5,
   },
-  signInButtonText: {
-    fontSize: 17,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  // The special link to auto-fill (as seen in new UI)
-  helperTextLink: {
-    alignSelf: 'center',
-    marginTop: 20,
-    marginBottom: 15,
-  },
-  helperText: {
-    fontSize: 13,
-    color: '#A0A0A0', // Lighter grey helper text
-  },
-  // Small admin link below (to match the overall file functionality)
-  adminLinkContainer: {
-    alignSelf: 'center',
-    marginTop: 5,
-  },
-  adminLinkText: {
-    fontSize: 13,
-    color: '#3366FF',
-    textDecorationLine: 'underline',
+  buttonDisabled: { backgroundColor: '#A0B4FF' },
+  signInButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 17 },
+  footerNote: { 
+    textAlign: 'center', 
+    fontSize: 11, 
+    color: '#AAA', 
+    marginTop: 20, 
+    fontStyle: 'italic' 
   },
 });
