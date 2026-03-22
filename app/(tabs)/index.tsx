@@ -48,7 +48,7 @@ export default function LoginScreen() {
             
             <View style={styles.headerSection}>
               <Image 
-                source={require('../assets/neu-logo.png')} 
+                source={require('../../assets/neu-logo.png')} 
                 style={styles.logo} 
                 resizeMode="contain" 
               />
