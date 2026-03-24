@@ -1,4 +1,4 @@
-import { Picker } from '@react-native-picker/picker'; // Run: npx expo install @react-native-picker/picker
+import { Picker } from '@react-native-picker/picker';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -9,7 +9,6 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [selectedProgram, setSelectedProgram] = useState('');
 
-  // Your list of NEU Undergraduate Programs
   const programs = [
     "Bachelor of Elementary Education", "Bachelor of Secondary Education",
     "BS in Accountancy", "BS in Accounting Information System",
@@ -33,8 +32,9 @@ export default function LoginScreen() {
       Alert.alert("Selection Required", "Please select your undergraduate program first.");
       return;
     }
-    // Logic for successful sign-in
-    router.replace('/(tabs)');
+    
+    // NAVIGATION FIX: Pointing specifically to the dashboard file
+    router.replace('/(tabs)/dashboard'); 
   };
 
   return (
@@ -48,7 +48,8 @@ export default function LoginScreen() {
             
             <View style={styles.headerSection}>
               <Image 
-                source={require('../../assets/neu-logo.png')} 
+                // PATH FIX: Pointing to your images folder
+                source={require('../../assets/images/neu-logo.png')} 
                 style={styles.logo} 
                 resizeMode="contain" 
               />
@@ -56,13 +57,12 @@ export default function LoginScreen() {
               <Text style={styles.descriptionText}>New Era University Student Medical Record System</Text>
             </View>
 
-            {/* Program Selection - Crucial for Admin Filtering */}
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Undergraduate Program</Text>
               <View style={styles.pickerWrapper}>
                 <Picker
                   selectedValue={selectedProgram}
-                  onValueChange={(itemValue: string | number) => setSelectedProgram(itemValue as string)}
+                  onValueChange={(itemValue) => setSelectedProgram(itemValue)}
                   style={styles.picker}
                   dropdownIconColor="#3366FF"
                 >
