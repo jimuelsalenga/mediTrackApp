@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons'; // Added for the admin icon
 import { Picker } from '@react-native-picker/picker';
 import { router } from 'expo-router';
 import { useState } from 'react';
@@ -28,22 +29,17 @@ export default function LoginScreen() {
   ];
 
   const handleSignIn = () => {
-    // 1. Check if Program is selected
     if (!selectedProgram) {
       Alert.alert("Selection Required", "Please select your undergraduate program first.");
       return;
     }
 
-    // 2. Demo Account Credentials
     const demoEmail = "student@neu.edu.ph";
     const demoPassword = "student123";
 
-    // 3. Validation Logic
     if (email.toLowerCase() === demoEmail && password === demoPassword) {
-      // Success: Clear stack and go to dashboard
       router.replace('/(tabs)/dashboard'); 
     } else {
-      // Failure: Show invalid message
       Alert.alert(
         "Invalid Credentials", 
         "The email or password you entered is incorrect. Please use the authorized institutional account."
@@ -62,7 +58,6 @@ export default function LoginScreen() {
             
             <View style={styles.headerSection}>
               <Image 
-                // Using the correct path based on your assets folder structure
                 source={require('../../assets/images/neu-logo.png')} 
                 style={styles.logo} 
                 resizeMode="contain" 
@@ -71,6 +66,7 @@ export default function LoginScreen() {
               <Text style={styles.descriptionText}>New Era University Student Medical Record System</Text>
             </View>
 
+            {/* ... Undergraduate Program Picker ... */}
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Undergraduate Program</Text>
               <View style={styles.pickerWrapper}>
@@ -88,6 +84,7 @@ export default function LoginScreen() {
               </View>
             </View>
 
+            {/* ... Institutional Email Input ... */}
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Institutional Email</Text>
               <TextInput 
@@ -100,6 +97,7 @@ export default function LoginScreen() {
               />
             </View>
 
+            {/* ... Password Input ... */}
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Password</Text>
               <TextInput 
@@ -117,6 +115,15 @@ export default function LoginScreen() {
               activeOpacity={0.8}
             >
               <Text style={styles.signInButtonText}>Sign In</Text>
+            </TouchableOpacity>
+
+            {/* 1. Admin Access Button */}
+            <TouchableOpacity 
+              style={styles.adminAccessButton}
+              onPress={() => router.push('/(tabs)/admin-login')}
+            >
+              <Ionicons name="shield-checkmark-outline" size={16} color="#666" style={{ marginRight: 6 }} />
+              <Text style={styles.adminAccessText}>Access Health Office Portal</Text>
             </TouchableOpacity>
 
             <Text style={styles.footerNote}>
@@ -181,11 +188,27 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: { backgroundColor: '#A0B4FF' },
   signInButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 17 },
+  
+  // 2. Added Admin Button Styles
+  adminAccessButton: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    paddingVertical: 10,
+  },
+  adminAccessText: {
+    color: '#666',
+    fontSize: 13,
+    fontWeight: '600',
+    textDecorationLine: 'underline',
+  },
+
   footerNote: { 
     textAlign: 'center', 
     fontSize: 11, 
     color: '#AAA', 
-    marginTop: 20, 
+    marginTop: 15, 
     fontStyle: 'italic' 
   },
 });

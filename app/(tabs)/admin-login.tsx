@@ -40,7 +40,7 @@ export default function AdminLogin() {
             <Text style={styles.inputLabel}>Staff Email</Text>
             <TextInput 
               style={styles.input}
-              placeholder="admin.health@neu.edu.ph"
+              placeholder="admin@neu.edu.ph"
               value={email}
               onChangeText={setEmail}
               autoCapitalize="none"

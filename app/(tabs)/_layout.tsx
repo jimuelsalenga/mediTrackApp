@@ -3,44 +3,61 @@ import { Tabs } from 'expo-router';
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ 
-      tabBarActiveTintColor: '#0066FF', 
-      headerShown: false 
-    }}>
-      {/* LOGIN SCREEN CONFIG */}
+    <Tabs screenOptions={{ tabBarActiveTintColor: '#3366FF' }}>
+      
+      {/* 1. STUDENT LOGIN - Header and Tabs removed */}
       <Tabs.Screen
         name="index"
         options={{
-          // This hides the entire footer bar on this screen
+          title: 'Home',
+          headerShown: false, // This removes the "Home" text at the top
+          tabBarIcon: ({ color }) => <Ionicons name="home" size={24} color={color} />,
           tabBarStyle: { display: 'none' }, 
-          // This ensures the login doesn't have its own button
+        }}
+      />
+
+      {/* 2. ADMIN LOGIN - Header and Tabs removed */}
+      <Tabs.Screen
+        name="admin-login"
+        options={{
+          headerShown: false, // This removes the header for admin login
+          tabBarStyle: { display: 'none' },
           href: null, 
         }}
       />
 
-      {/* OTHER SCREENS */}
+      {/* 3. ADMIN DASHBOARD - Header kept for professional branding */}
       <Tabs.Screen
-        name="dashboard"
+        name="admin-dashboard"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <Ionicons name="home-outline" size={24} color={color} />,
+          headerTitle: 'Admin Portal',
+          headerShown: true, // Keep this so the admin knows where they are
+          tabBarStyle: { display: 'none' },
+          href: null,
         }}
       />
-      
+
+      {/* 4. STUDENT RECORDS - Navigation visible */}
       <Tabs.Screen
         name="records"
         options={{
           title: 'Records',
-          tabBarIcon: ({ color }) => <Ionicons name="document-text-outline" size={24} color={color} />,
+          headerShown: true,
+          tabBarIcon: ({ color }) => <Ionicons name="document-text" size={24} color={color} />,
+          tabBarStyle: { display: 'flex' },
         }}
       />
 
-      {/* Hide admin and other utility screens from the footer */}
-      <Tabs.Screen name="admin-login" options={{ href: null }} />
-      <Tabs.Screen name="admin-dashboard" options={{ href: null }} />
-      <Tabs.Screen name="notifications" options={{ href: null }} />
-      <Tabs.Screen name="profile" options={{ href: null }} />
-      <Tabs.Screen name="explore" options={{ href: null }} />
+      {/* 5. STUDENT DASHBOARD - Navigation visible */}
+      <Tabs.Screen
+        name="dashboard"
+        options={{
+          title: 'Dashboard',
+          headerShown: true,
+          tabBarIcon: ({ color }) => <Ionicons name="grid" size={24} color={color} />,
+          tabBarStyle: { display: 'flex' },
+        }}
+      />
     </Tabs>
   );
 }
