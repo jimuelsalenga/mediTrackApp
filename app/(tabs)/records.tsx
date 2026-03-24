@@ -2,10 +2,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import * as DocumentPicker from 'expo-document-picker';
 import { useState } from 'react';
-import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+// 1. Added Image to the import
+import { Alert, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function UploadRecordsScreen() {
-  const [fullName, setFullName] = useState('Lebron'); // Default from your UI
+  const [fullName, setFullName] = useState('Lebron');
   const [studentId, setStudentId] = useState('23-12345-678');
   const [fileType, setFileType] = useState('X-Ray');
   const [fileName, setFileName] = useState<string | null>(null);
@@ -35,7 +36,12 @@ export default function UploadRecordsScreen() {
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <View style={styles.logoBox}>
-            <Ionicons name="medical" size={20} color="#0066FF" />
+            {/* 2. Replaced Ionicons with your NEU Logo */}
+            <Image 
+              source={require('../assets/images/neu-logo.png')} 
+              style={styles.logoImage} 
+              resizeMode="contain"
+            />
           </View>
           <Text style={styles.headerTitle}>MediTrack</Text>
         </View>
@@ -73,7 +79,7 @@ export default function UploadRecordsScreen() {
         {/* File Type Dropdown */}
         <View style={styles.inputGroup}>
           <Text style={styles.label}>FILE TYPE</Text>
-          <View style={styles.pickerContainer}>
+          <div style={styles.pickerContainer}>
             <Picker
               selectedValue={fileType}
               onValueChange={(itemValue) => setFileType(itemValue)}
@@ -82,7 +88,7 @@ export default function UploadRecordsScreen() {
               <Picker.Item label="X-Ray" value="X-Ray" />
               <Picker.Item label="Physical Exam" value="Physical Exam" />
             </Picker>
-          </View>
+          </div>
         </View>
 
         {/* Upload Dropzone */}
@@ -121,13 +127,19 @@ const styles = StyleSheet.create({
   },
   headerLeft: { flexDirection: 'row', alignItems: 'center' },
   logoBox: {
-    width: 32,
-    height: 32,
-    backgroundColor: '#F0F5FF',
+    width: 35, // Slightly larger to fit the logo better
+    height: 35,
+    backgroundColor: '#fff', // Changed to white for a cleaner look with the logo
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
+    overflow: 'hidden', // Ensures logo doesn't bleed out of rounded corners
+  },
+  // 3. Added style for the image logo
+  logoImage: {
+    width: '100%',
+    height: '100%',
   },
   headerTitle: { fontSize: 18, fontWeight: 'bold' },
   scrollContent: { padding: 25 },
@@ -148,11 +160,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9FAFC',
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#007AFF', // Blue border like your image
+    borderColor: '#007AFF', 
     overflow: 'hidden',
   },
   picker: { height: 55, width: '100%' },
-  // Dotted/Dashed Upload Zone
   dropzone: {
     height: 180,
     borderWidth: 2,
@@ -176,7 +187,7 @@ const styles = StyleSheet.create({
   dropzoneTitle: { fontSize: 16, fontWeight: 'bold', color: '#333' },
   dropzoneSub: { fontSize: 12, color: '#999', marginTop: 5 },
   submitButton: {
-    backgroundColor: '#8EBCFF', // Lighter blue like your image
+    backgroundColor: '#8EBCFF', 
     height: 60,
     borderRadius: 15,
     flexDirection: 'row',
