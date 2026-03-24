@@ -22,7 +22,6 @@ export default function ProfileScreen() {
         {/* 1. Header with Back Button */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#333" />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Student Profile</Text>
           <View style={{ width: 24 }} /> {/* Spacer for centering */}
