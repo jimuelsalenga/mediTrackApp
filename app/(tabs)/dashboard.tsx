@@ -1,11 +1,19 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useState } from 'react';
 import { Image, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function StudentDashboard() {
+  // Simulated state - in a real app, this comes from your database
+  const [notificationsCount, setNotificationsCount] = useState(1);
+  const [examStatus, setExamStatus] = useState({
+    xray: 'Pending',
+    physical: 'Approved'
+  });
+
   return (
     <SafeAreaView style={styles.container}>
-      {/* 1. Modern Header */}
+      {/* 1. Header with Notification Badge */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Image 
@@ -18,9 +26,25 @@ export default function StudentDashboard() {
             <Text style={styles.headerSubtitle}>NEU Health Portal</Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.profileButton} onPress={() => router.push('/profile.tsx')}>
-          <Ionicons name="person-circle-outline" size={32} color="#3366FF" />
-        </TouchableOpacity>
+        <View style={styles.headerRight}>
+          <TouchableOpacity 
+            style={styles.iconButton} 
+            onPress={() => router.push('/notifications')}
+          >
+            <Ionicons name="notifications-outline" size={26} color="#3366FF" />
+            {notificationsCount > 0 && (
+              <View style={styles.notifBadge}>
+                <Text style={styles.notifText}>{notificationsCount}</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.profileButton} 
+            onPress={() => router.push('/profile')}
+          >
+            <Ionicons name="person-circle-outline" size={32} color="#3366FF" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
@@ -31,11 +55,29 @@ export default function StudentDashboard() {
           <Text style={styles.subGreeting}>Stay updated with your medical requirements.</Text>
         </View>
 
-        {/* 3. Enhanced Compliance Card */}
+        {/* 3. Real-time Verification Status */}
+        <View style={styles.sectionHeader}>
+          <Text style={styles.subHeader}>Verification Status</Text>
+        </View>
+        <View style={styles.statusListCard}>
+          <StatusRow 
+            icon="barcode-outline" 
+            label="Chest X-Ray" 
+            status={examStatus.xray} 
+          />
+          <View style={styles.divider} />
+          <StatusRow 
+            icon="fitness-outline" 
+            label="Physical Exam" 
+            status={examStatus.physical} 
+          />
+        </View>
+
+        {/* 4. Main Compliance Card */}
         <View style={styles.statusCard}>
           <View style={styles.statusInfo}>
             <Text style={styles.complianceLabel}>Current Compliance</Text>
-            <Text style={styles.statusMainText}>No Records</Text>
+            <Text style={styles.statusMainText}>Incomplete</Text>
             <View style={styles.badge}>
               <Text style={styles.badgeText}>Action Required</Text>
             </View>
@@ -43,31 +85,16 @@ export default function StudentDashboard() {
           <Ionicons name="shield-checkmark" size={80} color="rgba(255,255,255,0.2)" style={styles.cardIcon} />
         </View>
 
-        {/* 4. Submissions Section */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.subHeader}>My Submissions</Text>
-          <TouchableOpacity onPress={() => router.push('/records')}>
-            <Text style={styles.viewAll}>View All</Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.emptySubmissionsBox}>
-          <Ionicons name="cloud-upload-outline" size={40} color="#CCC" />
-          <Text style={styles.emptyText}>
-            No medical documents found. Please upload your records for verification.
-          </Text>
-        </View>
-
-        {/* 5. Main Action Button */}
+        {/* 5. Submissions Button */}
         <TouchableOpacity 
           style={styles.submitButton}
           onPress={() => router.push('/records')}
           activeOpacity={0.8}
         >
           <View style={styles.buttonIconBg}>
-            <Ionicons name="add" size={24} color="#3366FF" />
+            <Ionicons name="cloud-upload" size={24} color="#3366FF" />
           </View>
-          <Text style={styles.submitButtonText}>Upload New Record</Text>
+          <Text style={styles.submitButtonText}>Update Medical Records</Text>
         </TouchableOpacity>
 
         {/* 6. Support Card */}
@@ -89,6 +116,24 @@ export default function StudentDashboard() {
   );
 }
 
+// Sub-component for Status Rows
+function StatusRow({ icon, label, status }: { icon: any, label: string, status: string }) {
+  const isApproved = status === 'Approved';
+  return (
+    <View style={styles.statusRow}>
+      <View style={styles.statusRowLeft}>
+        <Ionicons name={icon} size={22} color="#555" />
+        <Text style={styles.statusLabelText}>{label}</Text>
+      </View>
+      <View style={[styles.statusIndicator, { backgroundColor: isApproved ? '#E8F5E9' : '#FFF3E0' }]}>
+        <Text style={[styles.statusIndicatorText, { color: isApproved ? '#2E7D32' : '#EF6C00' }]}>
+          {status}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F2F6FF' },
   header: {
@@ -102,14 +147,46 @@ const styles = StyleSheet.create({
     borderBottomColor: '#E1E4E8',
   },
   headerLeft: { flexDirection: 'row', alignItems: 'center' },
+  headerRight: { flexDirection: 'row', alignItems: 'center' },
   logoSmall: { width: 40, height: 40, marginRight: 10 },
   headerTitle: { fontSize: 18, fontWeight: 'bold', color: '#1A1A1A' },
   headerSubtitle: { fontSize: 10, color: '#3366FF', fontWeight: 'bold', textTransform: 'uppercase' },
+  iconButton: { padding: 5, marginRight: 10, position: 'relative' },
   profileButton: { padding: 5 },
+  notifBadge: {
+    position: 'absolute',
+    right: 0,
+    top: 0,
+    backgroundColor: '#FF3B30',
+    borderRadius: 9,
+    width: 18,
+    height: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#fff',
+  },
+  notifText: { color: '#fff', fontSize: 10, fontWeight: 'bold' },
   scrollContent: { padding: 20 },
   welcomeSection: { marginBottom: 25 },
   greetingText: { fontSize: 26, fontWeight: 'bold', color: '#1A1A1A' },
   subGreeting: { fontSize: 14, color: '#666', marginTop: 4 },
+  sectionHeader: { marginBottom: 12 },
+  subHeader: { fontSize: 16, fontWeight: 'bold', color: '#555', textTransform: 'uppercase', letterSpacing: 0.5 },
+  statusListCard: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 15,
+    marginBottom: 25,
+    borderWidth: 1,
+    borderColor: '#E1E4E8',
+  },
+  statusRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10 },
+  statusRowLeft: { flexDirection: 'row', alignItems: 'center' },
+  statusLabelText: { marginLeft: 12, fontSize: 15, fontWeight: '600', color: '#333' },
+  statusIndicator: { paddingHorizontal: 12, paddingVertical: 4, borderRadius: 8 },
+  statusIndicatorText: { fontSize: 12, fontWeight: 'bold' },
+  divider: { height: 1, backgroundColor: '#F0F0F0', marginVertical: 5 },
   statusCard: {
     backgroundColor: '#3366FF',
     borderRadius: 24,
@@ -129,19 +206,6 @@ const styles = StyleSheet.create({
   badge: { backgroundColor: 'rgba(255,255,255,0.2)', alignSelf: 'flex-start', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8 },
   badgeText: { color: '#fff', fontSize: 10, fontWeight: 'bold' },
   cardIcon: { position: 'absolute', right: -10, bottom: -10 },
-  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15 },
-  subHeader: { fontSize: 18, fontWeight: 'bold', color: '#333' },
-  viewAll: { color: '#3366FF', fontSize: 14, fontWeight: '600' },
-  emptySubmissionsBox: {
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 30,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#E1E4E8',
-    marginBottom: 20,
-  },
-  emptyText: { textAlign: 'center', color: '#999', fontSize: 14, marginTop: 10, lineHeight: 20 },
   submitButton: {
     backgroundColor: '#3366FF',
     flexDirection: 'row',

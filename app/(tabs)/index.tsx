@@ -28,13 +28,27 @@ export default function LoginScreen() {
   ];
 
   const handleSignIn = () => {
+    // 1. Check if Program is selected
     if (!selectedProgram) {
       Alert.alert("Selection Required", "Please select your undergraduate program first.");
       return;
     }
-    
-    // NAVIGATION FIX: Pointing specifically to the dashboard file
-    router.replace('/(tabs)/dashboard'); 
+
+    // 2. Demo Account Credentials
+    const demoEmail = "student@neu.edu.ph";
+    const demoPassword = "student123";
+
+    // 3. Validation Logic
+    if (email.toLowerCase() === demoEmail && password === demoPassword) {
+      // Success: Clear stack and go to dashboard
+      router.replace('/(tabs)/dashboard'); 
+    } else {
+      // Failure: Show invalid message
+      Alert.alert(
+        "Invalid Credentials", 
+        "The email or password you entered is incorrect. Please use the authorized institutional account."
+      );
+    }
   };
 
   return (
@@ -48,7 +62,7 @@ export default function LoginScreen() {
             
             <View style={styles.headerSection}>
               <Image 
-                // PATH FIX: Pointing to your images folder
+                // Using the correct path based on your assets folder structure
                 source={require('../../assets/images/neu-logo.png')} 
                 style={styles.logo} 
                 resizeMode="contain" 

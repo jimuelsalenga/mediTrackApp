@@ -5,9 +5,9 @@ import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, Vi
 export default function ProfileScreen() {
   // These would eventually come from your Auth state/database
   const userData = {
-    name: "Juan Dela Cruz",
-    email: "jdelacruz@neu.edu.ph",
-    studentId: "2023-12345",
+    name: "student",
+    email: "student@neu.edu.ph",
+    studentId: "23-12345-678",
     program: "BS in Information Technology",
     yearLevel: "3rd Year",
   };

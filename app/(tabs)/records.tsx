@@ -79,6 +79,7 @@ export default function UploadRecordsScreen() {
               onValueChange={(itemValue) => setFileType(itemValue)}
               style={styles.picker}
             >
+              <Picker.Item label="Select" value="Select" />
               <Picker.Item label="X-Ray" value="X-Ray" />
               <Picker.Item label="Physical Exam" value="Physical Exam" />
             </Picker>
