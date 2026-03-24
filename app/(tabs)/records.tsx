@@ -38,7 +38,7 @@ export default function UploadRecordsScreen() {
           <View style={styles.logoBox}>
             {/* 2. Replaced Ionicons with your NEU Logo */}
             <Image 
-              source={require('../assets/images/neu-logo.png')} 
+              source={require('./assets/images/neu-logo.png')} 
               style={styles.logoImage} 
               resizeMode="contain"
             />
