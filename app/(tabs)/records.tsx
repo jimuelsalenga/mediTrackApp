@@ -5,9 +5,9 @@ import { useState } from 'react';
 import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function UploadRecordsScreen() {
-  const [fullName, setFullName] = useState('Lebron'); // Default from your UI
-  const [studentId, setStudentId] = useState('23-12345-678');
-  const [fileType, setFileType] = useState('X-Ray');
+  const [fullName, setFullName] = useState('');
+  const [studentId, setStudentId] = useState('');
+  const [fileType, setFileType] = useState('');
   const [fileName, setFileName] = useState<string | null>(null);
 
   const pickDocument = async () => {

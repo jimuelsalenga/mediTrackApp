@@ -3,8 +3,7 @@ import { router } from 'expo-router';
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ProfileScreen() {
-  // These would eventually come from your Auth state/database
-  const userData = {
+ const userData = {
     name: "student",
     email: "student@neu.edu.ph",
     studentId: "23-12345-678",
@@ -13,7 +12,6 @@ export default function ProfileScreen() {
   };
 
   const handleLogout = () => {
-    // Navigate back to login and clear navigation history
     router.replace('/');
   };
 
@@ -71,7 +69,7 @@ export default function ProfileScreen() {
           <Text style={styles.logoutText}>Sign Out</Text>
         </TouchableOpacity>
 
-        <Text style={styles.versionText}>MediTrack v1.0.2</Text>
+        <Text style={styles.versionText}>MediTrack</Text>
       </ScrollView>
     </SafeAreaView>
   );

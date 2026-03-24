@@ -3,61 +3,70 @@ import { Tabs } from 'expo-router';
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: '#3366FF' }}>
-      
-      {/* 1. STUDENT LOGIN - Header and Tabs removed */}
+    <Tabs 
+      screenOptions={{ 
+        tabBarActiveTintColor: '#3366FF',
+        headerShown: false
+      }}
+    >
+      {/* 1. STUDENT LOGIN - Hidden from Bottom Bar */}
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          headerShown: false, // This removes the "Home" text at the top
-          tabBarIcon: ({ color }) => <Ionicons name="home" size={24} color={color} />,
-          tabBarStyle: { display: 'none' }, 
+          href: null, 
+          tabBarStyle: { display: 'none' },
         }}
       />
 
-      {/* 2. ADMIN LOGIN - Header and Tabs removed */}
+      {/* 2. ADMIN LOGIN & DASHBOARD - Hidden from Bottom Bar */}
       <Tabs.Screen
         name="admin-login"
         options={{
-          headerShown: false, // This removes the header for admin login
+          href: null,
           tabBarStyle: { display: 'none' },
-          href: null, 
         }}
       />
-
-      {/* 3. ADMIN DASHBOARD - Header kept for professional branding */}
       <Tabs.Screen
         name="admin-dashboard"
         options={{
-          headerTitle: 'Admin Portal',
-          headerShown: true, // Keep this so the admin knows where they are
-          tabBarStyle: { display: 'none' },
           href: null,
+          tabBarStyle: { display: 'none' },
         }}
       />
 
-      {/* 4. STUDENT RECORDS - Navigation visible */}
+      {/* 3. RECORDS - Now the first icon */}
+
+      {/* 4. DASHBOARD - Second icon */}
+      <Tabs.Screen
+        name="dashboard"
+        options={{
+          title: 'Dashboard',
+          tabBarIcon: ({ color }) => <Ionicons name="grid" size={24} color={color} />,
+          tabBarStyle: { display: 'flex' },
+        }}
+      />
+
       <Tabs.Screen
         name="records"
         options={{
           title: 'Records',
-          headerShown: true,
           tabBarIcon: ({ color }) => <Ionicons name="document-text" size={24} color={color} />,
           tabBarStyle: { display: 'flex' },
         }}
       />
 
-      {/* 5. STUDENT DASHBOARD - Navigation visible */}
+      {/* 5. PROFILE - Third icon */}
       <Tabs.Screen
-        name="dashboard"
+        name="profile"
         options={{
-          title: 'Dashboard',
-          headerShown: true,
-          tabBarIcon: ({ color }) => <Ionicons name="grid" size={24} color={color} />,
+          title: 'Profile',
+          tabBarIcon: ({ color }) => <Ionicons name="person" size={24} color={color} />,
           tabBarStyle: { display: 'flex' },
         }}
       />
+      
+      {/* Utility screens */}
+      <Tabs.Screen name="notifications" options={{ href: null }} />
     </Tabs>
   );
 }

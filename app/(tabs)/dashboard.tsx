@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Image, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function StudentDashboard() {
-  // Simulated state - in a real app, this comes from your database
   const [notificationsCount, setNotificationsCount] = useState(1);
   const [examStatus, setExamStatus] = useState({
     xray: 'Pending',
