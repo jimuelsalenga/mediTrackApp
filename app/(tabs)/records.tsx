@@ -2,12 +2,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import * as DocumentPicker from 'expo-document-picker';
 import { useState } from 'react';
-import { Alert, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function UploadRecordsScreen() {
   const [fullName, setFullName] = useState('');
   const [studentId, setStudentId] = useState('');
-  const [fileType, setFileType] = useState('');
+  const [fileType, setFileType] = useState('Select');
   const [fileName, setFileName] = useState<string | null>(null);
 
   const pickDocument = async () => {
@@ -22,24 +22,32 @@ export default function UploadRecordsScreen() {
   };
 
   const handleSubmit = () => {
+    if (fileType === 'Select') {
+      Alert.alert("Selection Required", "Please select a file type (X-Ray or Physical Exam).");
+      return;
+    }
     if (!fileName) {
       Alert.alert("Missing File", "Please upload a document before submitting.");
       return;
     }
-    Alert.alert("Success", "Your record has been submitted for verification.");
+    Alert.alert("Success", `Your ${fileType} has been submitted for verification.`);
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
+      {/* 1. Updated Header with NEU Logo */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <View style={styles.logoBox}>
-            <Ionicons name="medical" size={20} color="#0066FF" />
-          </View>
+          <Image 
+            source={require('../../assets/images/neu-logo.png')} 
+            style={styles.neuLogoHeader} 
+            resizeMode="contain" 
+          />
           <Text style={styles.headerTitle}>MediTrack</Text>
         </View>
-        <Ionicons name="search-outline" size={24} color="#0066FF" />
+        <TouchableOpacity>
+          <Ionicons name="search-outline" size={24} color="#3366FF" />
+        </TouchableOpacity>
       </View>
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -55,7 +63,8 @@ export default function UploadRecordsScreen() {
             style={styles.textInput}
             value={fullName}
             onChangeText={setFullName}
-            placeholder="Enter your full name"
+            placeholder="Lebron" // Matches your design
+            placeholderTextColor="#AAA"
           />
         </View>
 
@@ -66,7 +75,8 @@ export default function UploadRecordsScreen() {
             style={styles.textInput}
             value={studentId}
             onChangeText={setStudentId}
-            placeholder="XX-XXXXX-XXX"
+            placeholder="23-12345-678" // Matches your design
+            placeholderTextColor="#AAA"
           />
         </View>
 
@@ -79,7 +89,7 @@ export default function UploadRecordsScreen() {
               onValueChange={(itemValue) => setFileType(itemValue)}
               style={styles.picker}
             >
-              <Picker.Item label="Select" value="Select" />
+              <Picker.Item label="Select file type..." value="Select" color="#999" />
               <Picker.Item label="X-Ray" value="X-Ray" />
               <Picker.Item label="Physical Exam" value="Physical Exam" />
             </Picker>
@@ -89,7 +99,7 @@ export default function UploadRecordsScreen() {
         {/* Upload Dropzone */}
         <TouchableOpacity style={styles.dropzone} onPress={pickDocument}>
           <View style={styles.uploadIconCircle}>
-            <Ionicons name="cloud-upload-outline" size={32} color="#007AFF" />
+            <Ionicons name="cloud-upload-outline" size={32} color="#3366FF" />
           </View>
           <Text style={styles.dropzoneTitle}>
             {fileName ? fileName : 'Drop or Upload your file'}
@@ -100,7 +110,10 @@ export default function UploadRecordsScreen() {
         </TouchableOpacity>
 
         {/* Submit Button */}
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+        <TouchableOpacity 
+          style={[styles.submitButton, !fileName && styles.submitButtonDisabled]} 
+          onPress={handleSubmit}
+        >
           <Ionicons name="checkmark-circle-outline" size={20} color="#fff" style={{marginRight: 8}} />
           <Text style={styles.submitButtonText}>Submit for Verification</Text>
         </TouchableOpacity>
@@ -116,21 +129,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#F0F0F0',
   },
   headerLeft: { flexDirection: 'row', alignItems: 'center' },
-  logoBox: {
-    width: 32,
-    height: 32,
-    backgroundColor: '#F0F5FF',
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
+  neuLogoHeader: {
+    width: 30,
+    height: 30,
     marginRight: 10,
   },
-  headerTitle: { fontSize: 18, fontWeight: 'bold' },
+  headerTitle: { fontSize: 18, fontWeight: 'bold', color: '#1A1A1A' },
   scrollContent: { padding: 25 },
   mainTitle: { fontSize: 28, fontWeight: 'bold', color: '#111', marginBottom: 8 },
   subTitle: { fontSize: 14, color: '#888', marginBottom: 30, lineHeight: 20 },
@@ -144,16 +154,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     borderWidth: 1,
     borderColor: '#EEE',
+    color: '#333',
   },
   pickerContainer: {
     backgroundColor: '#F9FAFC',
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#007AFF', // Blue border like your image
+    borderColor: '#3366FF',
     overflow: 'hidden',
   },
   picker: { height: 55, width: '100%' },
-  // Dotted/Dashed Upload Zone
   dropzone: {
     height: 180,
     borderWidth: 2,
@@ -177,13 +187,15 @@ const styles = StyleSheet.create({
   dropzoneTitle: { fontSize: 16, fontWeight: 'bold', color: '#333' },
   dropzoneSub: { fontSize: 12, color: '#999', marginTop: 5 },
   submitButton: {
-    backgroundColor: '#8EBCFF', // Lighter blue like your image
+    backgroundColor: '#8EBCFF', 
     height: 60,
     borderRadius: 15,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
+    elevation: 2,
   },
+  submitButtonDisabled: { backgroundColor: '#D0E2FF' },
   submitButtonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
 });
