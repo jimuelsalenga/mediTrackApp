@@ -1,8 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import * as DocumentPicker from 'expo-document-picker';
+import { router } from 'expo-router';
 import { useState } from 'react';
-import { Alert, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function UploadRecordsScreen() {
   const [fullName, setFullName] = useState('');
@@ -35,22 +36,36 @@ export default function UploadRecordsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* 1. Updated Header with NEU Logo */}
+      {/* 1. Unified Header - Matches Student Dashboard */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Image 
             source={require('../../assets/images/neu-logo.png')} 
-            style={styles.neuLogoHeader} 
+            style={styles.logoSmall} 
             resizeMode="contain" 
           />
-          <Text style={styles.headerTitle}>MediTrack</Text>
+          <View>
+            <Text style={styles.headerTitle}>MediTrack</Text>
+            <Text style={styles.headerSubtitle}>NEU Health Portal</Text>
+          </View>
         </View>
-        <TouchableOpacity>
-          <Ionicons name="search-outline" size={24} color="#3366FF" />
-        </TouchableOpacity>
+        <View style={styles.headerRight}>
+          <TouchableOpacity 
+            style={styles.iconButton} 
+            onPress={() => router.push('/notifications')}
+          >
+            <Ionicons name="notifications-outline" size={26} color="#3366FF" />
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.profileButton} 
+            onPress={() => router.push('/profile')}
+          >
+            <Ionicons name="person-circle-outline" size={32} color="#3366FF" />
+          </TouchableOpacity>
+        </View>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <Text style={styles.mainTitle}>Upload Records</Text>
         <Text style={styles.subTitle}>
           Securely submit your medical files for verification by the health center.
@@ -63,7 +78,7 @@ export default function UploadRecordsScreen() {
             style={styles.textInput}
             value={fullName}
             onChangeText={setFullName}
-            placeholder="Lebron" // Matches your design
+            placeholder="Enter Full Name"
             placeholderTextColor="#AAA"
           />
         </View>
@@ -75,7 +90,7 @@ export default function UploadRecordsScreen() {
             style={styles.textInput}
             value={studentId}
             onChangeText={setStudentId}
-            placeholder="23-12345-678" // Matches your design
+            placeholder="00-00000-000"
             placeholderTextColor="#AAA"
           />
         </View>
@@ -113,6 +128,7 @@ export default function UploadRecordsScreen() {
         <TouchableOpacity 
           style={[styles.submitButton, !fileName && styles.submitButtonDisabled]} 
           onPress={handleSubmit}
+          activeOpacity={0.7}
         >
           <Ionicons name="checkmark-circle-outline" size={20} color="#fff" style={{marginRight: 8}} />
           <Text style={styles.submitButtonText}>Submit for Verification</Text>
@@ -124,30 +140,35 @@ export default function UploadRecordsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff' },
+  container: { 
+    flex: 1, 
+    backgroundColor: '#F2F6FF', // Switched to match Dashboard background
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 15,
+    backgroundColor: '#fff',
     borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    borderBottomColor: '#E1E4E8',
   },
   headerLeft: { flexDirection: 'row', alignItems: 'center' },
-  neuLogoHeader: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-  },
+  headerRight: { flexDirection: 'row', alignItems: 'center' },
+  logoSmall: { width: 40, height: 40, marginRight: 10 },
   headerTitle: { fontSize: 18, fontWeight: 'bold', color: '#1A1A1A' },
+  headerSubtitle: { fontSize: 10, color: '#3366FF', fontWeight: 'bold', textTransform: 'uppercase' },
+  iconButton: { padding: 5, marginRight: 10 },
+  profileButton: { padding: 5 },
   scrollContent: { padding: 25 },
   mainTitle: { fontSize: 28, fontWeight: 'bold', color: '#111', marginBottom: 8 },
-  subTitle: { fontSize: 14, color: '#888', marginBottom: 30, lineHeight: 20 },
+  subTitle: { fontSize: 14, color: '#666', marginBottom: 30, lineHeight: 20 },
   inputGroup: { marginBottom: 20 },
   label: { fontSize: 12, fontWeight: 'bold', color: '#999', marginBottom: 8, letterSpacing: 1 },
   textInput: {
-    backgroundColor: '#F9FAFC',
+    backgroundColor: '#fff',
     height: 55,
     borderRadius: 12,
     paddingHorizontal: 15,
@@ -157,9 +178,9 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   pickerContainer: {
-    backgroundColor: '#F9FAFC',
+    backgroundColor: '#fff',
     borderRadius: 12,
-    borderWidth: 2,
+    borderWidth: 1.5,
     borderColor: '#3366FF',
     overflow: 'hidden',
   },
@@ -170,7 +191,7 @@ const styles = StyleSheet.create({
     borderColor: '#B0D0FF',
     borderStyle: 'dashed',
     borderRadius: 20,
-    backgroundColor: '#F4F9FF',
+    backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 20,
@@ -179,7 +200,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#E1EFFF',
+    backgroundColor: '#F0F4FF',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 15,
@@ -187,14 +208,14 @@ const styles = StyleSheet.create({
   dropzoneTitle: { fontSize: 16, fontWeight: 'bold', color: '#333' },
   dropzoneSub: { fontSize: 12, color: '#999', marginTop: 5 },
   submitButton: {
-    backgroundColor: '#8EBCFF', 
+    backgroundColor: '#3366FF',
     height: 60,
     borderRadius: 15,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 10,
-    elevation: 2,
+    elevation: 3,
   },
   submitButtonDisabled: { backgroundColor: '#D0E2FF' },
   submitButtonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },

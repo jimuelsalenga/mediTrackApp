@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Image, Platform, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function StudentDashboard() {
   const [notificationsCount, setNotificationsCount] = useState(1);
@@ -12,7 +12,7 @@ export default function StudentDashboard() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* 1. Header with Notification Badge */}
+      {/* 1. Header - Fixed for Phone Notch */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Image 
@@ -31,11 +31,11 @@ export default function StudentDashboard() {
             onPress={() => router.push('/notifications')}
           >
             <Ionicons name="notifications-outline" size={26} color="#3366FF" />
-            {notificationsCount > 0 && (
+            {notificationsCount > 0 ? (
               <View style={styles.notifBadge}>
                 <Text style={styles.notifText}>{notificationsCount}</Text>
               </View>
-            )}
+            ) : null}
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.profileButton} 
@@ -134,7 +134,12 @@ function StatusRow({ icon, label, status }: { icon: any, label: string, status: 
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F2F6FF' },
+  container: { 
+    flex: 1, 
+    backgroundColor: '#F2F6FF',
+    // Account for Android Status Bar height
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0 
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
