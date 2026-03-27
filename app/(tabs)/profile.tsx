@@ -4,7 +4,7 @@ import { Image, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text,
 
 export default function ProfileScreen() {
   const userData = {
-    name: "Jimuel Y. Salenga",
+    name: "Student",
     email: "student@neu.edu.ph",
     studentId: "23-12345-678",
     program: "BS in Information Technology",
